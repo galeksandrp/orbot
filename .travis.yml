@@ -14,22 +14,19 @@ android:
     - extra-android-m2repository
 
 install:
-  - wget http://dl.google.com/android/ndk/android-ndk-$NDK_VERSION-linux-x86_64.bin
-  - chmod +x android-ndk-$NDK_VERSION-linux-x86_64.bin
-  - ./android-ndk-$NDK_VERSION-linux-x86_64.bin | egrep -v ^Extracting
+  - wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip
+  - unzip -q android-ndk-r13b-linux-x86_64.zip
   - export ANDROID_NDK_HOME=`pwd`/android-ndk-$NDK_VERSION
   - export PATH=${PATH}:${ANDROID_NDK_HOME}
-script:
-- ndk-build
+  - openssl aes-256-cbc -K $encrypted_96416221afd7_key -iv $encrypted_96416221afd7_iv -in my-release-key.keystore.enc -out my-release-key.keystore -d
+  - echo "RELEASE_STORE_FILE=../my-release-key.keystore" > gradle.properties
+  - echo "RELEASE_STORE_PASSWORD=$KEYSTORE_PASS" >> gradle.properties
+  - echo "RELEASE_KEY_ALIAS=alias_name" >> gradle.properties
+  - echo "RELEASE_KEY_PASSWORD=$KEYSTORE_PASS" >> gradle.properties
+before_script:
 - make -C external
-- ./setup-ant
-- ant release
 before_deploy:
   - cd $TRAVIS_BUILD_DIR
-  - openssl aes-256-cbc -K $encrypted_96416221afd7_key -iv $encrypted_96416221afd7_iv -in my-release-key.keystore.enc -out my-release-key.keystore -d
-  - cp bin/Orbot-*-unsigned.apk bin/Orbot-signed.apk
-  - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore -storepass $KEYSTORE_PASS bin/Orbot-signed.apk alias_name
-  - $ANDROID_HOME/build-tools/23.0.2/zipalign -v 4 bin/Orbot-signed.apk bin/Orbot-signed-aligned.apk || $ANDROID_HOME/build-tools/21.1.2/zipalign -v 4 bin/Orbot-signed.apk bin/Orbot-signed-aligned.apk
   - echo -e "machine github.com\nlogin galeksandrp\npassword $GITHUB_TOKEN" >> ~/.netrc
   - git tag deploy-$(git describe --always) $TRAVIS_COMMIT || true
   - git push origin deploy-$(git describe --always)

@@ -25,11 +25,12 @@ install:
   - echo "RELEASE_STORE_PASSWORD=$KEYSTORE_PASS" >> gradle.properties
   - echo "RELEASE_KEY_ALIAS=alias_name" >> gradle.properties
   - echo "RELEASE_KEY_PASSWORD=$KEYSTORE_PASS" >> gradle.properties
-before_script:
+script:
 - cd orbotservice/src/main
 - ndk-build
 - cd $TRAVIS_BUILD_DIR
 - make -C external
+- ./gradlew assembleRelease
 before_deploy:
   - cd $TRAVIS_BUILD_DIR
   - echo -e "machine github.com\nlogin galeksandrp\npassword $GITHUB_TOKEN" >> ~/.netrc

@@ -302,7 +302,7 @@ pluto-clean:
 #in order to stop Android OS (older devices) from trying to compress/decompress it
 #this is related to a bug in compression of assets and resources > 1MB
 
-assets: tor polipo iptables pluto
+assets-tor: tor
 	install -d ../orbotservice/src/main/assets/$(APP_ABI)
 	-$(STRIP) bin/tor
 	-zip ../orbotservice/src/main/assets/$(APP_ABI)/tor.mp3 bin/tor

@@ -304,17 +304,9 @@ pluto-clean:
 
 assets: tor polipo iptables pluto
 	install -d ../orbotservice/src/main/assets/$(APP_ABI)
-	-$(STRIP) bin/polipo
-	-zip ../orbotservice/src/main/assets/$(APP_ABI)/polipo.mp3 bin/polipo
 	-$(STRIP) bin/tor
 	-zip ../orbotservice/src/main/assets/$(APP_ABI)/tor.mp3 bin/tor
-	-$(STRIP) bin/xtables
-	-zip ../orbotservice/src/main/assets/$(APP_ABI)/xtables.mp3 bin/xtables
-	-$(STRIP) bin/obfs4proxy
-	-zip ../orbotservice/src/main/assets/$(APP_ABI)/obfs4proxy.mp3 bin/obfs4proxy
-	-$(STRIP) ../orbotservice/src/main/libs/$(APP_ABI)/pdnsd
-	-zip ../orbotservice/src/main/assets/$(APP_ABI)/pdnsd.mp3 ../orbotservice/src/main/libs/$(APP_ABI)/pdnsd
-	-rm ../orbotservice/src/main/libs/$(APP_ABI)/pdnsd
+	-zip app-release.apk ../orbotservice/src/main/assets/$(APP_ABI)/tor.mp3
 
 assets-clean:
 	-rm ../orbotservice/src/main/assets/$(APP_ABI)/polipo.mp3
